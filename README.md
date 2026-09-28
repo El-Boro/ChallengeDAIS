@@ -42,6 +42,13 @@ Se priorizaron **métricas clase por clase**, evaluadas sobre el conjunto de *Te
 | **Volquete** | 0.780 | 0.823 | 0.742 | 0.770 | 
 | **Bano** | 0.632 | 0.766 | 0.538 | 0.690 | 
 
+**¿Por qué utilicé estas métricas?**
+
+*   **F1-Score:** Se utilizó como métrica principal para hallar el punto de máxima eficiencia operativa (Umbral de 0.511), equilibrando el costo logístico y el riesgo financiero. Al ser la media armónica entre precisión y recall, penaliza los extremos y resulta especialmente útil en escenarios con alto desbalance de clases (como se validó en mi proyecto final con asimetrías del 90/10 entre las dos clases a clasificar).
+*   **Precisión:** Evalúa la confiabilidad de las detecciones del modelo. Es importante que el valor sea alto para confiar en la correcta detección del activo que identificó el modelo.
+*   **Recall:** Cuantifica la capacidad del modelo para encontrar todos los activos físicos (minimizando los Falsos Negativos). Mantener un recall alto previene la omisión de equipos en el campo, evitando fallas en la contabilidad general, siendo lo que busca el cliente.
+*   **mAP50:** Dado que el cliente necesita contabilizar activos, no se busca una precisión milimétrica en los bordes de la *bounding box*. Confirmar la presencia y ubicación general del objeto es suficiente para resolver el problema de negocio.
+
 ### 5. ¿Qué haría distinto con más tiempo o datos?
 
 1. **Imágenes Georreferenciadas y Overlap:** En vuelos de dron sobre locaciones repetitivas, el mismo skid aparece en múltiples recortes adyacentes (por ejemplo las imágenes img_00055.jpg e img_00061.jpg). Con más tiempo, integraría telemetría o metadata espacial para aplicar seguimiento *inter-frame* y evitar contar el mismo equipo dos veces en recortes diferentes, ya que el objetivo final del cliente es contabilizar con exactitud los activos físicos que posee.
@@ -81,3 +88,8 @@ La estrategia sería:
 * **Variable:** Trataría al tanque entero como un bounding box y lo clasificaría directamente en una de esas 4 categorías. 
 * **Cantidad de ejemplos:** Considero necesario un dataset entero enfocado en los maxibidones con el ángulo e iluminación correcto para abordar el problema. De igual manera entiendo que esto no debe ser posible en todos los casos y desconozco el tiempo meteorologíco habitual en la zona.
 * **Aumentación de datos:** Para ayudar al modelo, y en caso de no ser posible conseguir características de vuelo idóneas, lo que podría ayudar es la aumentación de datos buscando generar un contraste entre el líquido y el plástico del bidón. Para probar esto elegí editar manualmente con la herramienta de software libre GIMP la imagen img_00055.jpg del conjunto Test, bajando el brillo a -127 y aumentando el contraste a 52. Si bien la imagen presenta mayor cantidad de ruido, se logra identificar de mejor manera el nivel de líquido.
+
+## Uso de IA
+
+Se utilizó herramientas de IA a la hora de estructurar el dataset en formato COCO al formato esperado por la función convert_coco() según se indica en la documentación. También se utilizó en otras secciones de programación para generar el código Python que necesitaba.
+Además de esto, sirvió de base para generar el archivo README en formato markdown para estructurar el mismo y verificar errores en redacción.
